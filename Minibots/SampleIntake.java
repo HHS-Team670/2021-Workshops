@@ -39,11 +39,12 @@ public class SampleIntake extends MustangSubsystemBase {
         deployer = new Solenoid(RobotMap.PCMODULE, RobotMap.INTAKE_DEPLOYER);
         isAccelerating = false;
     }
-
+    
+    //TODO return whether the roller is rolling
     public boolean isRolling() {
         //TODO return whether the roller is rolling
         return (roller.get() != 0);
-    }
+}
 
     public void deploy(boolean isDeployed) {
         this.isDeployed = isDeployed;
@@ -55,9 +56,8 @@ public class SampleIntake extends MustangSubsystemBase {
     }
 
 
-    //TODO set whether the roller should accelerate or not
     public void setAccelerate(boolean accel){
-        isAccelerating = accel;
+        //TODO set whether the roller should accelerate or not
     }
 
 
