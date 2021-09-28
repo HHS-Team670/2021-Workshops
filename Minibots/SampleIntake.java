@@ -106,6 +106,7 @@ public class SampleIntake extends MustangSubsystemBase {
             return HealthState.RED;
         }
         return HealthState.GREEN;
+        //Spam
     }
 
     @Override
