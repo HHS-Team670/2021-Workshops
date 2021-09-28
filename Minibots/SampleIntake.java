@@ -40,9 +40,7 @@ public class SampleIntake extends MustangSubsystemBase {
         isAccelerating = false;
     }
     
-    //TODO return whether the roller is rolling
     public boolean isRolling() {
-        //TODO return whether the roller is rolling
         return (roller.get() != 0);
 }
 
@@ -57,13 +55,10 @@ public class SampleIntake extends MustangSubsystemBase {
 
 
     public void setAccelerate(boolean accel){
-        //TODO set whether the roller should accelerate or not
     }
 
 
     public void roll(boolean reversed) {
-        //TODO set roller speed based on 'reversed' parameter
-        //HINT: use default INTAKE_ROLLER_SPEED if not accelerating
         if (!reversed) {
             roller.set(speed);
         } else {
@@ -91,7 +86,6 @@ public class SampleIntake extends MustangSubsystemBase {
     }
 
     public void stop() {
-        //TODO stop the roller
         roller.stopMotor();
     }
 
@@ -118,9 +112,6 @@ public class SampleIntake extends MustangSubsystemBase {
 
     @Override
     public void mustangPeriodic() { // <-- called repeatedly
-        // TODO increase the roller's speed if it isAccelerating
-        //HINT: Remember to account for constraints in roller speed
-        //HINT: use ACCELERATION_SPEED
         if (isAccelerating) {
             if (speed <= speed - ACCELERATE_SPEED) {
                 speed += ACCELERATE_SPEED;
