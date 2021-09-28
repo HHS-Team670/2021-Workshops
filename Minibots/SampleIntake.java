@@ -39,9 +39,9 @@ public class SampleIntake extends MustangSubsystemBase {
         deployer = new Solenoid(RobotMap.PCMODULE, RobotMap.INTAKE_DEPLOYER);
         isAccelerating = false;
     }
-
+    
+    //TODO return whether the roller is rolling
     public boolean isRolling() {
-        //TODO return whether the roller is rolling
         return false;
     }
 
@@ -55,15 +55,13 @@ public class SampleIntake extends MustangSubsystemBase {
     }
 
 
-    //TODO set whether the roller should accelerate or not
     public void setAccelerate(boolean accel){
-        isAccelerating = accel;
+        //TODO set whether the roller should accelerate or not
     }
 
 
     public void roll(boolean reversed) {
         //TODO set roller speed based on 'reversed' parameter
-        //HINT: use default INTAKE_ROLLER_SPEED if not accelerating
     }
 
     
