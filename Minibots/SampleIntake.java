@@ -29,7 +29,7 @@ public class SampleIntake extends MustangSubsystemBase {
     private double speed = 0.5; 
     private double ACCELERATE_SPEED = 0.05;
     private boolean isAccelerating = false;
-    private boolean isReversed = false;
+    private boolean reversed = false;
 
     public SampleIntake() {
         roller = SparkMAXFactory.buildFactorySparkMAX(RobotMap.INTAKE_ROLLER, Motor_Type.NEO_550);
