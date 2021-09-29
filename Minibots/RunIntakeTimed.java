@@ -25,7 +25,6 @@ public class RunIntakeTimed extends TimedCommand {
 
     @Override
     protected void initialize() {
-        intake.deploy(true);
         intake.setAccelerate(this.accelerate);
     }
 
