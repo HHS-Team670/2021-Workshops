@@ -23,12 +23,13 @@ public class SampleIntake extends MustangSubsystemBase {
     private Solenoid deployer;
     private boolean isDeployed = false;
 
-    private double speed = 1.0; 
     private double INTAKE_PEAK_CURRENT = 35; // Testing
     private int exceededCurrentLimitCount = 0;
-
+    
+    private double speed = 0.5; 
     private double ACCELERATE_SPEED = 0.05;
     private boolean isAccelerating = false;
+    private boolean isReversed = false;
 
     public SampleIntake() {
         roller = SparkMAXFactory.buildFactorySparkMAX(RobotMap.INTAKE_ROLLER, Motor_Type.NEO_550);
@@ -55,6 +56,7 @@ public class SampleIntake extends MustangSubsystemBase {
 
 
     public void setAccelerate(boolean accel){
+        isAccelerating = accel;
     }
 
 
@@ -64,6 +66,7 @@ public class SampleIntake extends MustangSubsystemBase {
         } else {
             roller.set(speed * -1);
         }
+        this.reversed = reversed;
     }
 
     
@@ -112,10 +115,11 @@ public class SampleIntake extends MustangSubsystemBase {
 
     @Override
     public void mustangPeriodic() { // <-- called repeatedly
-        if (isAccelerating) {
+        if (isAccelerating && isRolling()) {
             if (speed <= speed - ACCELERATE_SPEED) {
-                speed += ACCELERATE_SPEED;
-            }
+                speed += ACCELERATE_SPEED;  
+                roll(reversed);
+            } 
         }
     }
 
