@@ -57,11 +57,17 @@ public class SampleIntake extends MustangSubsystemBase {
 
     public void setAccelerate(boolean accel){
         //TODO set whether the roller should accelerate or not
+        this.isAccelerating = accel;
     }
 
 
     public void roll(boolean reversed) {
         //TODO set roller speed based on 'reversed' parameter
+        if (reversed) {
+            roller.set(-1 * speed);
+        } else {
+            roller.set(speed);
+        }
     }
 
     
@@ -85,6 +91,7 @@ public class SampleIntake extends MustangSubsystemBase {
 
     public void stop() {
         //TODO stop the roller
+        roller.set(0);
     }
 
     /**
@@ -114,6 +121,9 @@ public class SampleIntake extends MustangSubsystemBase {
         // TODO increase the roller's speed if it isAccelerating
         //HINT: Remember to account for constraints in roller speed
         //HINT: use ACCELERATION_SPEED
+        if (this.speed < (1.00 - this.ACCELERATE_SPEED)) {
+            roller.set(this.speed + this.ACCELERATE_SPEED);
+        }
     }
 
 }
