@@ -5,31 +5,37 @@ import Minibots.*;
 
 public class RunIntakeTimed extends TimedCommand {
 
-    double seconds;
-    SampleIntake intake;
+    private double seconds;
+    private boolean reverse;
+    private boolean accelerate;
+    private SampleIntake intake;
 
-    public RunIntakeTime(double secs) {
+    private RunIntakeTimed(boolean accel, boolean reserve, double secs, SampleIntake intak) {
+        super("yee", secs, intak);
         this.seconds = secs;
-        this.intake = new SampleIntake();
+        this.intake = intak;
         addRequirements(this.intake);
-        super("yee", this.seconds, this.intake);
+        this.reverse = reserve;
+        this.accelerate = accel;
+    }
+
+    public RunIntakeTimed(boolean accelerated, boolean reversed, double seconds) {
+        RunIntakeTimed(accelerated, reversed, seconds, new SampleIntake());
     }
 
     @Override
     protected void initialize() {
-        this.start();
         intake.deploy(true);
-        intake.roll(true);
-        intake.setAccelerate(true);
+        intake.setAccelerate(this.accelerate);
     }
 
     @Override
     protected void execute() {
-        intake.mustangPeriodic();
+        intake.roll(this.reverse);
     }
 
     @Override
-    public boolean isFinished() {
+    protected boolean isFinished() {
         if (intake.checkHealth() != HealthState.GREEN) {
             return true;
         }
@@ -43,7 +49,7 @@ public class RunIntakeTimed extends TimedCommand {
     }
 
     @Override
-    public void end() {
+    protected void end() {
         intake.stop();
     }
     
