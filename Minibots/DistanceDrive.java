@@ -9,11 +9,6 @@ public class DistanceDrive extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
     public void execute() {
 
     }
