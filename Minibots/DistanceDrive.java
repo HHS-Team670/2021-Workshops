@@ -8,14 +8,23 @@
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.team670.robot.subsystems.DriveBase;
 import frc.team670.robot.utils.Logger;
+
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.RaspiPin;
+
+import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team670.pi.Motor;
+import frc.team670.pi.sensors.Encoder;
+import jpigpio.PigpioException;
 
 /**
  * Add your docs here.
  */
-public class DistanceDrive extends WaitCommand {
+public class DistanceDrive extends RunCommand {
 
     private DriveBase base;
     private double leftPower;
@@ -27,8 +36,7 @@ public class DistanceDrive extends WaitCommand {
     private Encoder leftEncoder;
     private Encoder rightEncoder;
 
-    public BalancedDrive(double seconds, double power, double target, DriveBase base){
-        super(seconds);
+    public DistanceDrive(double power, double target, DriveBase base){
 
         this.leftPower = power;
         this.rightPower = power;
@@ -74,7 +82,7 @@ public class DistanceDrive extends WaitCommand {
         return false;
     }
 
-    public void end(boolean isInteruppted) {
+    public void end() {
         base.stop();
     }
 
