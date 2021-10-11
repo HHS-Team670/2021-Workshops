@@ -3,8 +3,8 @@ import frc.team670.robot.Robot;
 import frc.team670.robot.utils.Logger;
 
 public class DistanceDrive extends CommandBase {
-    double distance, power;
-    DriveBase base;
+    private double distance, leftPower, rightPower;
+    private DriveBase drivebase;
     
     public DistanceDrive(double distance, double power, DriveBase base) {
         this.distance = distance;
@@ -27,12 +27,15 @@ public class DistanceDrive extends CommandBase {
 
     @Override
     public void isFinished() {
-
+        public boolean isFinished() {
+            int leftTicks = drivebase.getLeftEncoder();
+            int rightTicks = drivebase.getRightEncoder();e
+        }
     }
 
     @Override
     public void end() {
-
+        drivebase.stop();
     }
 
 }
