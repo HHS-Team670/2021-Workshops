@@ -4,41 +4,45 @@ import frc.team670.robot.utils.Logger;
 
 public class DistanceDrive extends CommandBase {
 
-    private Drivebase drivebase;
-    private double distance, leftPower, rightPower;
+    private DriveBase base;
+    private double leftPower;
+    private double rightPower;
+    private double inches;
+    private int ticks;
 
-    public DistanceDrive() {
-        //initialize fields
-        //addRequirements(driveBase)
+    public DistanceDrive(double inches, double leftPower, double rightPower) {
+        inches = inches;
+        leftPower = leftPower;
+        rightPower = rightPower;
+
+        double diameter = 2.497;
+        double pi = 3.14195;
+
+        double circumference = (pi * diameter);
+        ticks = (int) (inches / circumference * 800);
+        addRequirements(base);
+
     }
 
     @Override
     public void execute() {
-        drivebase.tankDrive(leftPower, rightPower);
+        base.tankDrive(leftPower, rightPower);
         correct();
     }
 
     @Override
-    public boolean isFinished() {
-        int leftTicks = drivebase.getLeftEncoder().getTicks();
-
-        double rotations = leftTicks/800;
-        double circumference = 2.497*Math.PI;
-        double distance_traveled = rotations*circumference;
-    
-
-        if (distance_traveled >= distance){
-            return true;
-        }else{
-            return false;
+    public void isFinished() {
+        Encoder leftEncoder = base.getLeftEncoder().getTicks();
+        Encoder rightEncoder = base.getRightEncoder().getTicks();
+        if (rightEncoder >= ticks && leftEncoder >= ticks) {
+            end();
         }
     }
 
     @Override
     public void end() {
-        drivebase.stop();
+        base.stop();
     }
-
 
     public void correct() {
         Encoder leftEncoder = base.getLeftEncoder();
