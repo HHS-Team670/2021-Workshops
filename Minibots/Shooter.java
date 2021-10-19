@@ -35,7 +35,7 @@ public class Shooter extends MustangSubsystemBase {
   private List<SparkMAXLite> controllers;
 
   private CANEncoder stage2_mainEncoder;
-  private CANPIDController stage2_mainPIDController;
+  private CANPIDController pidController;
 
   private double targetRPM = 2500; // Will change later if we adjust by distance
   private static double DEFAULT_SPEED = 2500;
@@ -74,9 +74,15 @@ public class Shooter extends MustangSubsystemBase {
     followerController.follow(mainController);
  
     //TODO initialize stage2_mainEncoder and stage2_mainPIDController with mainController
+    pidController = mainConroller.getPIDController();
 
     
     // TODO set P, I, D, and FF constants on controller
+
+    pidController.setP(V_P);
+    pidController.setI(V_I);
+    pidController.setD(V_D);
+    pidController.setFF(V_FF);
   }
 
   /**
@@ -91,6 +97,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void run() {
     // TODO set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
+    pidController.setReference(speedAdjust + targetRPM, cotroltype.kVelocity);
   }
 
   /**
@@ -115,6 +122,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void stop() {
       // TODO setReference 0 and set Control type dutyCycle
+      pidControll.setReference(0, controlltype.dutyCycle)
   }
 
   
