@@ -90,7 +90,7 @@ public class Shooter extends MustangSubsystemBase {
    * runs the shooter
    */
   public void run() {
-    // set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
+    // TODO set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
   }
 
   /**
@@ -114,7 +114,7 @@ public class Shooter extends MustangSubsystemBase {
    * stops running shooter
    */
   public void stop() {
-      // setReference 0 and set Control type dutyCycle
+      // TODO setReference 0 and set Control type dutyCycle
   }
 
   
