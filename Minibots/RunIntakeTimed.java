@@ -3,12 +3,13 @@ import frc.team670.robot.Robot;
 import frc.team670.robot.subsystems.SampleIntake;
 import frc.team670.robot.utils.Logger;
 
-public class RunIntake extends RunCommand {
+public class RunIntakeTimed extends WaitCommand {
 
     boolean accelerated, reversed;
     SampleIntake intake;
 
-    public RunIntake(boolean accelerated, boolean reversed, SampleIntake intake) {
+    public RunIntakeTimed(boolean accelerated, boolean reversed, double seconds, SampleIntake intake) {
+        super(seconds);
         this.accelerated = accelerated;
         this.reversed = reversed;
         this.intake = intake;
@@ -25,3 +26,9 @@ public class RunIntake extends RunCommand {
         intake.roll(reversed);
     }
 
+    public void end() {
+        intake.stop();
+        Logger.consoleLog("Done rolling intake");
+    }
+
+}
