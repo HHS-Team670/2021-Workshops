@@ -23,12 +23,13 @@ public class SampleIntake extends MustangSubsystemBase {
     private Solenoid deployer;
     private boolean isDeployed = false;
 
-    private double speed = 1.0; 
     private double INTAKE_PEAK_CURRENT = 35; // Testing
     private int exceededCurrentLimitCount = 0;
-
+    
+    private double speed = 0.5; 
     private double ACCELERATE_SPEED = 0.05;
     private boolean isAccelerating = false;
+    private boolean reversed = false;
 
     public SampleIntake() {
         roller = SparkMAXFactory.buildFactorySparkMAX(RobotMap.INTAKE_ROLLER, Motor_Type.NEO_550);
@@ -40,10 +41,9 @@ public class SampleIntake extends MustangSubsystemBase {
         isAccelerating = false;
     }
     
-    //TODO return whether the roller is rolling
     public boolean isRolling() {
-        return false;
-    }
+        return (roller.get() != 0);
+}
 
     public void deploy(boolean isDeployed) {
         this.isDeployed = isDeployed;
@@ -56,12 +56,17 @@ public class SampleIntake extends MustangSubsystemBase {
 
 
     public void setAccelerate(boolean accel){
-        //TODO set whether the roller should accelerate or not
+        isAccelerating = accel;
     }
 
 
     public void roll(boolean reversed) {
-        //TODO set roller speed based on 'reversed' parameter
+        if (!reversed) {
+            roller.set(speed);
+        } else {
+            roller.set(speed * -1);
+        }
+        this.reversed = reversed;
     }
 
     
@@ -84,7 +89,7 @@ public class SampleIntake extends MustangSubsystemBase {
     }
 
     public void stop() {
-        //TODO stop the roller
+        roller.stopMotor();
     }
 
     /**
@@ -111,9 +116,12 @@ public class SampleIntake extends MustangSubsystemBase {
 
     @Override
     public void mustangPeriodic() { // <-- called repeatedly
-        // TODO increase the roller's speed if it isAccelerating
-        //HINT: Remember to account for constraints in roller speed
-        //HINT: use ACCELERATION_SPEED
+        if (isAccelerating && isRolling()) {
+            if (speed <= speed - ACCELERATE_SPEED) {
+                speed += ACCELERATE_SPEED;  
+                roll(reversed);
+            } 
+        }
     }
 
 }
