@@ -98,14 +98,14 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void run() {
     // TODO set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
-    stage2_mainPIDController.setReference(targetRPM, ControlType.Velocity);
+    stage2_mainPIDController.setReference(targetRPM+speedAdjust, ControlType.kVelocity);
   }
 
   /**
    * @param targetRPM sets velocity target for shooter
    */
   public void setVelocityTarget(double targetRPM) {
-    this.targetRPM=targetRPM;
+    stage2_mainPIDController.setSetPoint(targetRPM);
   }
 
   /**
