@@ -7,6 +7,7 @@
 
 package frc.team670.robot.subsystems;
 
+import java.lang.StackWalker.StackFrame;
 import java.util.List;
 
 import com.revrobotics.CANEncoder;
@@ -75,8 +76,13 @@ public class Shooter extends MustangSubsystemBase {
  
     //TODO initialize stage2_mainEncoder and stage2_mainPIDController with mainController
 
-    
+    stage2_mainEncoder=mainController.getEncoder();
+    stage2_mainPIDController=mainController.getEncoder();
     // TODO set P, I, D, and FF constants on controller
+    mainController.setP(V_P, VELOCITY_SLOT);
+    mainController.setI(V_I, VELOCITY_SLOT);
+    mainController.setD(V_D, VELOCITY_SLOT);
+    mainController.setFF(V_FF, VELOCITY_SLOT);
   }
 
   /**
@@ -84,6 +90,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public double getStage2Velocity() {
       // use stage2_mainEncoder
+      return stage2_mainEncoder.get();
 }
 
   /**
@@ -91,13 +98,14 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void run() {
     // TODO set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
+    stage2_mainPIDController.setReference(targetRPM, ControlType.Velocity);
   }
 
   /**
    * @param targetRPM sets velocity target for shooter
    */
   public void setVelocityTarget(double targetRPM) {
-    
+    this.targetRPM=targetRPM;
   }
 
   /**
@@ -115,6 +123,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void stop() {
       // TODO setReference 0 and set Control type dutyCycle
+      mainController.setReference(0, ControlType.dutyCycle);
   }
 
   
