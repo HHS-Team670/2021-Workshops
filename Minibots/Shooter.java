@@ -79,10 +79,10 @@ public class Shooter extends MustangSubsystemBase {
     
     // TODO set P, I, D, and FF constants on controller
 
-    pidController.setP(V_P);
-    pidController.setI(V_I);
-    pidController.setD(V_D);
-    pidController.setFF(V_FF);
+    pidController.setP(V_P, VELOCITY_SLOT);
+    pidController.setI(V_I, VELOCITY_SLOT);
+    pidController.setD(V_D, VELOCITY_SLOT);
+    pidController.setFF(V_FF, VELOCITY_SLOT);
   }
 
   /**
