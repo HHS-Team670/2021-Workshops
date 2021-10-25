@@ -72,11 +72,17 @@ public class Shooter extends MustangSubsystemBase {
     mainController = controllers.get(0);
     followerController = controllers.get(1);
     followerController.follow(mainController);
- 
     //TODO initialize stage2_mainEncoder and stage2_mainPIDController with mainController
+    stage2_mainEncoder=mainController.get(mainEncoder);
+    stage2_mainPIDController=mainController.get(mainPIDController);
 
     
     // TODO set P, I, D, and FF constants on controller
+      setP(V_P);
+      setI(V_I);
+      setD(V_D);
+      setFF(V_FF);
+
   }
 
   /**
@@ -91,6 +97,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void run() {
     // TODO set setpoint using setReference and give it the targetSpeed + adjust and Control type Velocity
+      setReference(targetRPM, controlType.Velocity);
   }
 
   /**
@@ -115,6 +122,7 @@ public class Shooter extends MustangSubsystemBase {
    */
   public void stop() {
       // TODO setReference 0 and set Control type dutyCycle
+      setReference(0, controlType.dutyCycle);
   }
 
   
