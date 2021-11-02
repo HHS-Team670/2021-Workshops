@@ -10,12 +10,12 @@ import frc.team670.robot.utils.MathUtils;
 
 public class PIDDistanceDrive extends CommandBase {
 
-	PIDController m_leftController, m_rightController;
+	PIDController m_rightController;
 
 	double m_targetInches;
 	DriveBase driveBase;
 
-	// TODO: Find values
+	// TODO: Play around with these constants
 	// proportional speed constant
 	double kP = 0.1;
 
@@ -32,18 +32,14 @@ public class PIDDistanceDrive extends CommandBase {
 	 * 
 	 * @param target Target distance in inches
 	 */
-	public PIDDistanceDrive(double targetInches, Drivebase drivebase) {
+	public PIDDistanceDrive(double targetInches, DriveBase drivebase) {
 
 		m_targetInches = targetInches;		
 		
 		
-		m_leftController = new PIDController(kP, kI, kD);
 		m_rightController = new PIDController(kP, kI, kD);
 
 		double toleranceTicks = MathUtils.convertInchesToEncoderTicks(TOLERANCE_INCHES);
-
-
-        m_leftController.setTolerance(toleranceTicks);
 
         m_rightController.setTolerance(toleranceTicks);
 
@@ -57,17 +53,19 @@ public class PIDDistanceDrive extends CommandBase {
 		double m_targetTicks = MathUtils.convertInchesToEncoderTicks(m_targetInches);
 
 		// look at documentation for a method to set setpoint on both PID controllers
-
-		
+		m_rightController.setSetpoint(m_targetTicks);
 	}
 
 	public void execute() {
 	    
 		// find the error in ticks using drivebase encoders
+		double rTicks = driveBase.getRightEncoder().getTicks();
 
 		// look at documentation for a method to calculate the new speed with this error
+		double speed = edu.wpi.first.wpiutil.math.MathUtils.clamp(m_rightController.calculate(rTicks), -1, 1);
 
 		// call tankDrive with these new speeds
+		driveBase.tankDrive(-speed, -speed);
 
 	}
 
@@ -75,7 +73,7 @@ public class PIDDistanceDrive extends CommandBase {
 
 		// documentation has method for checking if the PID controller has reached the setpoint
 
-        return (  ||  );
+        return (m_rightController.atSetpoint());
 	}
 
 	public void end(boolean isInterrupted) {
