@@ -105,7 +105,7 @@ public class Encoder {
 		// } else {
 		// 	return this.count;
 		// }
-		return this.count;
+		return -this.count;
 	}
 
 	/**
