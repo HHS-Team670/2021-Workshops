@@ -77,6 +77,10 @@ public class XKeys {
         public static final double SHOOT_LONG = 16;
 
         public static final double CANCEL_ALL = 18;
+
+        public static final double TURN_TURRET_RIGHT = 19;
+        public static final double TURN_TURRET_LEFT = 20;
+        public static final double RESET_TURRET = 21;
     }
 
     /**
@@ -143,6 +147,12 @@ public class XKeys {
                 setMidShotSpeed();
             else if (s == xkeysCommands.SHOOT_LONG)
                 setLongShotSpeed();
+            else if (s == xkeysCommands.TURN_TURRET_RIGHT)
+                turnTurretRight();
+            else if (s == xkeysCommands.TURN_TURRET_LEFT)
+                turnTurretLeft();
+            else if (s == xkeysCommands.RESET_TURRET)
+                resetTurret();
         }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
         table.addEntryListener("xkeys-indexer", (table2, key2, entry, value, flags) -> {
             if (value.getType() != NetworkTableType.kDouble)
@@ -230,6 +240,18 @@ public class XKeys {
 
     private void autoPickupBall() {
         // MustangScheduler.getInstance().schedule(new ShootAllBalls(indexer));
+    }
+
+    private void turnTurretLeft(){
+        //turret.RotateToAngle(turret.currentAngle - 1);
+    }
+
+    private void turnTurretRight(){
+        //turret.RotateToAngle(turret.currentAngle + 1);
+    }
+
+    private void resetTurret(){
+        turret.rotateToHome();
     }
 
     private void visionAlign() {
