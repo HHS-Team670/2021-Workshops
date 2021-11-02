@@ -180,65 +180,149 @@ public class XKeys {
         MustangScheduler.getInstance().schedule(new ExtendClimber(climber));
     }
 
+    pprivate void driveToBarAndPrepareClimb() {
+        MustangScheduler.getInstance().schedule(new DriveToBarAndPrepareClimb(drivebase, climber));
+    }
+
     private void retractClimber() {
         MustangScheduler.getInstance().schedule(new Climb(climber));
     }
 
+    private void hookOnBar() {
+        MustangScheduler.getInstance().schedule(new HookOnBar(climber));
+    }
+
     private void initShooter() {
-        MustangScheduler.getInstance().schedule(new StartShooterByDistance(shooter, drivebase));
+        MustangScheduler.getInstance().schedule(new StartShooterByPoseDistance(shooter, drivebase));
     }
 
     private void shoot() {
         MustangScheduler.getInstance().schedule(new Shoot(shooter));
     }
 
+    private void startShooter() {
+        MustangScheduler.getInstance().schedule(new StartShooter(shooter));
+    }
+
+    private void visionShooter() {
+        MustangScheduler.getInstance().schedule(new StartShooterByVisionDistance(shooter, coprocessor));
+    }
+
     private void increaseShooterSpeed() {
-        shooter.adjustRPMAdjuster(50.0);
+        MustangScheduler.getInstance().schedule(new SetRPMAdjuster(50.0, shooter));
     }
 
     private void decreaseShooterSpeed() {
-        shooter.adjustRPMAdjuster(-50.0);
+        MustangScheduler.getInstance().schedule(new SetRPMAdjuster(-50.0, shooter));
     }
 
     private void setCloseShotSpeed() {
-        shooter.setVelocityTarget(2125);
+        MustangScheduler.getInstance().schedule(new SetRPMTarget(2125, shooter));
     }
 
     private void setMidShotSpeed() {
-        shooter.setVelocityTarget(2275);
+        MustangScheduler.getInstance().schedule(new SetRPMTarget(2275, shooter));
     }
 
     private void setLongShotSpeed() {
-        shooter.setVelocityTarget(2725);
+        MustangScheduler.getInstance().schedule(new SetRPMTarget(2725, shooter));
     }
 
     private void shootAll() {
-        // MustangScheduler.getInstance().schedule(new ShootAllBalls(indexer));
+        MustangScheduler.getInstance().schedule(new ShootAllBalls(indexer));
     }
 
     private void toggleIntake() {
-        MustangScheduler.getInstance().schedule(new DeployIntake(!intake.isDeployed(), intake));
+        MustangScheduler.getInstance().schedule(new ToggleIntake(intake));
+    }
+
+    private void deployIntake() {
+        MustangScheduler.getInstance().schedule(new DeployIntake(false, intake));
+    }
+
+    private void retractIntake() {
+        MustangScheduler.getInstance().schedule(new DeployIntake(true, intake));
     }
 
     private void runIntakeIn() {
         MustangScheduler.getInstance().schedule(new RunIntake(false, intake));
     }
 
+    private void runIntakeConveyorIn() {
+        MustangScheduler.getInstance().schedule(new RunIntakeConveyor(intake, conveyor, indexer, false));
+    }
+
+    private void runIntakeConveyorOut() {
+        MustangScheduler.getInstance().schedule(new RunIntakeConveyor(intake, conveyor, indexer, true));
+    }
+
     private void runIntakeOut() {
         MustangScheduler.getInstance().schedule(new RunIntake(true, intake));
     }
 
+    private void runConveyorOut() {
+        MustangScheduler.getInstance().schedule(new RunConveyor(true, conveyor, indexer));
+    }
+
+    private void runConveyorIn() {
+        MustangScheduler.getInstance().schedule(new RunConveyor(false, conveyor, indexer));
+    }
+
+    private void stopIntake() {
+        MustangScheduler.getInstance().schedule(new StopIntake(intake));
+    }
+
     private void autoPickupBall() {
-        // MustangScheduler.getInstance().schedule(new ShootAllBalls(indexer));
+        MustangScheduler.getInstance().schedule(new ShootAllBalls(indexer, conveyor, shooter, coprocessor));
     }
 
     private void visionAlign() {
         MustangScheduler.getInstance().schedule(new GetVisionData(coprocessor, drivebase));
     }
 
-    // private void indexerAtIntake() {
-    //     MustangScheduler.getInstance().schedule(new RotateToIntakePosition(indexer));
-    // }
+    private void autoRotate() {
+        MustangScheduler.getInstance().schedule(new AutoRotate(turret, coprocessor, drivebase));
+    }
+
+    private void alignTurret() {
+        MustangScheduler.getInstance().schedule(new GetLatestDataAndAlignTurret(turret, drivebase, coprocessor));
+    }
+
+    private void rotateTurretL() {
+        MustangScheduler.getInstance().schedule(new RotateToAngle(turret, 20.0));
+    }
+
+    private void rotateTurretR() {
+        MustangScheduler.getInstance().schedule(new RotateToAngle(turret, -20.0));
+    }
+
+    private void rotateTurretToHome() {
+        MustangScheduler.getInstance().schedule(new RotateToHome(turret));
+    }
+
+    private void turnTurret() {
+        MustangScheduler.getInstance().schedule(new RotateTurret(turret, drivebase, coprocessor));
+    }
+
+    private void zeroTurret() {
+        MustangScheduler.getInstance().schedule(new ZeroTurret(turret));
+    }
+
+    private void manualIndexer() {
+        MustangScheduler.getInstance().schedule(new ManualRunIndexer(indexer, conveyor, intake, false));
+    }
+
+    private void manualIndexerRev() {
+        MustangScheduler.getInstance().schedule(new ManualRunIndexer(indexer, conveyor, intake, true));
+    }
+
+    private void indexer() {
+        MustangScheduler.getInstance().schedule(new Indexer(indexer, conveyor));
+    }
+
+    private void updraw() {
+        MustangScheduler.getInstance().schedule(new ToggleUpdraw(indexer));
+    }
 
     private void cancelAllCommands() {
         MustangScheduler.getInstance().schedule(new CancelAllCommands());
