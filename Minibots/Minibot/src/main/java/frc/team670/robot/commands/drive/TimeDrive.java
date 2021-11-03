@@ -17,11 +17,23 @@ import frc.team670.robot.utils.Logger;
 public class TimeDrive extends WaitCommand {
 
   private DriveBase driveBase;
-  private double power;
+  private double lpower;
+  private double rpower;
 
+ // for turning
+  public TimeDrive(double seconds, double lpower, double rpower, DriveBase driveBase) {
+    super(seconds);
+    this.lpower = lpower;
+    this.rpower = rpower;
+    addRequirements(driveBase);
+    this.driveBase = driveBase;
+  }
+
+  
   public TimeDrive(double seconds, double power, DriveBase driveBase) {
     super(seconds);
-    this.power = power;
+    this.lpower = power;
+    this.rpower = power;
     addRequirements(driveBase);
     this.driveBase = driveBase;
   }
@@ -29,7 +41,9 @@ public class TimeDrive extends WaitCommand {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    driveBase.tankDrive(power, power);
+    Logger.consoleLog("TicksR %d TicksL %d SpeedR %f SpeedL %f", driveBase.getRightEncoder().getTicks()
+    , driveBase.getLeftEncoder().getTicks(), lpower, rpower);
+    driveBase.tankDrive(lpower, rpower);
   }
 
   // Called once after isFinished returns true

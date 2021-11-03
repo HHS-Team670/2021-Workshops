@@ -48,17 +48,12 @@ public class DistanceDrive extends CommandBase {
 	
 	// Called once after isFinished returns true
 	
-	public void end() {
+	public void end(boolean isInterrupted) {
 		driveBase.stop();
 		Logger.consoleLog("LeftSpeed: %s Right Speed: %s DistanceT: %s Ticks: %s", 
 				speedL, speedR, getDistance(), driveBase.getRightEncoder().getTicks());
 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	public void interrupted() {
-		end();
-	}	
 	
 	// Checks that the wheels are driving at the same speed, corrects the speed
 	// so that the left/right are equal
@@ -86,7 +81,7 @@ public class DistanceDrive extends CommandBase {
 			
 		public double getDistance()
 		{
-			double distance = driveBase.getLeftEncoder().getDistance();
+			double distance = driveBase.getRightEncoder().getDistance();
 			return Math.abs(distance);
 		}
 
