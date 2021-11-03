@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team670.robot.commands.drive.BalancedDrive;
 import frc.team670.robot.commands.drive.PIDDistanceDrive;
 import frc.team670.robot.commands.drive.TimeDrive;
+import frc.team670.robot.commands.drive.ObstacleCourse;
 import frc.team670.robot.subsystems.DriveBase;
 import frc.team670.robot.utils.Logger;
 
@@ -72,7 +73,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PIDDistanceDrive(5, driveBase); //TODO REPLACE m_autonomousCommand WITH THE COMMAND YOU WANT TO SCHEDULE
+    return new ObstacleCourse(driveBase); //TODO REPLACE m_autonomousCommand WITH THE COMMAND YOU WANT TO SCHEDULE
   }
 
 
