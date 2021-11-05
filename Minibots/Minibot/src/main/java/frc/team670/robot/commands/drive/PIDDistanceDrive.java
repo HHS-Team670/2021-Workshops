@@ -43,6 +43,8 @@ public class PIDDistanceDrive extends CommandBase {
 
         m_rightController.setTolerance(toleranceTicks);
 
+		this.driveBase = drivebase;
+		
 		addRequirements(driveBase);
 		
 	}
