@@ -5,7 +5,7 @@ import frc.team670.robot.utils.Logger;
 
 public class PathChoosingIndexer extends MustangSubsystemBase {
 
-    private TimeOfFlightSensor[] sensors; // sensor 0 is bottom most, sensor 4 is top most
+    private TimeOfFlightSensor[] sensors; // sensor 0 is bottom most, sensor 5 is top most
 
     private SparkMaxLite frontMotor, backMotor;
 
@@ -22,9 +22,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     private int rightNumBalls, leftNumBalls;
 
     public PathChoosingIndexer() {
-        sensors = new TimeOfFlightSensor[5] {new TimeOfFlightSensor(0),
+        sensors = new TimeOfFlightSensor[6] {new TimeOfFlightSensor(0),
         new TimeOfFlightSensor(1), new TimeOfFlightSensor(2), new TimeOfFlightSensor(3),
-        new TimeOfFlightSensor(4)};
+        new TimeOfFlightSensor(4), new TimeOfFlightSensor(5)};
 
         frontMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.FRONT_MOTOR, Motor_Type.NEO_550);
         backMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.BACK_MOTOR, Motor_Type.NEO_550);
@@ -42,7 +42,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
             wheel.enableVoltageCompensation(true);
         }
 
-        chamberStates = new boolean[4];
+        chamberStates = new boolean[4]; 
     }
 
     private void pushGameDataToDashboard() {
@@ -59,7 +59,14 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to the ToF documentation!
      */
     public void updateChamberStates() {
-
+        for(int i = 0; i <= sensors.length; i++) {
+            if (sensors[i].getDistance()  =  5) {
+                chamberStates[i] = true;
+            }
+            else {
+                chamberStates[i] = false;
+            }
+        }
     }
 
     /**
@@ -67,7 +74,11 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @return The topmost chamber that holds a ball.
      */
     public int getTopChamber() {
-
+        for(int i = sensors.length; i >= 0; i--) {
+            if (chamberStates[i] = true) {
+                return i;
+            }
+        }
     }
 
     /**
@@ -75,7 +86,11 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite documentation.
      */
     public void runIndexer(boolean shooting) {
-
+        frontMotor.set(INDEXER_SPEED);
+        backMotor.set(-1 * INDEXER_SPEED);
+        if (shooting) {
+            updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+        }
     }
 
     /**
@@ -83,7 +98,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX documentation.
      */
     private void runUpdraw() {
-
+        updraw.run
     }
 
     /**
