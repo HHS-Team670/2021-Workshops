@@ -13,8 +13,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
 
     private boolean[] chamberStates;
 
+    //wheel speeds
     private double UPDRAW_SPEED = -0.9;
     private double INDEXER_SPEED = 0.35;
+
     private static final int UPDRAW_NORMAL_CONTINUOUS_CURRENT_LIMIT = 9;
     private static final int UPDRAW_PEAK_CURRENT_LIMIT = 15;
 
@@ -24,8 +26,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     public PathChoosingIndexer() {
         sensors = new TimeOfFlightSensor[5] {new TimeOfFlightSensor(0),
         new TimeOfFlightSensor(1), new TimeOfFlightSensor(2), new TimeOfFlightSensor(3),
-        new TimeOfFlightSensor(4)};
-
+        new TimeOfFlightSensor(4), new TimeOfFlightSensor(4)};
+        //takes in port and motor type: buildFactorySparkMAX
         frontMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.FRONT_MOTOR, Motor_Type.NEO_550);
         backMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.BACK_MOTOR, Motor_Type.NEO_550);
         updraw = TalonSRXFactory.buildFactoryTalonSRX(RobotMap.UPDRAW_SPINNER, false);
@@ -59,7 +61,12 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to the ToF documentation!
      */
     public void updateChamberStates() {
-
+        totalNumBalls = 0;
+        for (int i = 0; i < sensorVals.length; i++) {
+            chamberStates[i] = sensorVals[i] < RobotConstants.MIN_BALL_DETECTED_WIDTH_INDEXER;
+            if (chamberStates[i])
+                totalNumBalls++;
+        }
     }
 
     /**
@@ -94,6 +101,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @param right
      */
     public void setRatio(int left, int right) {
+        leftNumBalls = left;
+        rightNumBalls = right;
+        
 
     }
 
@@ -117,7 +127,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
-        
+        if (UPDRAW_SPEED == -0.9){
+            return true;
+        }
     }
 
     /**
