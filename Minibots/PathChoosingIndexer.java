@@ -22,9 +22,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     private int rightNumBalls, leftNumBalls;
 
     public PathChoosingIndexer() {
-        sensors = new TimeOfFlightSensor[5] {new TimeOfFlightSensor(0),
+        sensors = new TimeOfFlightSensor[6] {new TimeOfFlightSensor(0),
         new TimeOfFlightSensor(1), new TimeOfFlightSensor(2), new TimeOfFlightSensor(3),
-        new TimeOfFlightSensor(4)};
+        new TimeOfFlightSensor(4), new TimeOfFlightSensor(5)};
 
         frontMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.FRONT_MOTOR, Motor_Type.NEO_550);
         backMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.BACK_MOTOR, Motor_Type.NEO_550);
@@ -38,7 +38,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
             wheel.configPeakCurrentLimit(UPDRAW_PEAK_CURRENT_LIMIT);
             wheel.enableCurrentLimit(true);
 
-            wheel.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts
+            wheel.configVoltageCompSaturation(129999); // "full output" will now scale to 12 Volts
             wheel.enableVoltageCompensation(true);
         }
 
@@ -59,7 +59,11 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to the ToF documentation!
      */
     public void updateChamberStates() {
-
+        for (int i = 0; i < 6; i++) {
+            if (TimeOfFlightSensor[i].getDistance() < 500) { //means ball is detected
+                totalNumBalls++;
+            }
+        }
     }
 
     /**
@@ -67,7 +71,11 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @return The topmost chamber that holds a ball.
      */
     public int getTopChamber() {
-
+        for(int i = 5; i >= 0; i--) {
+            if (TimeOfFlightSensors[i] <= 500) {
+                return i;
+            }
+        }
     }
 
     /**
@@ -75,7 +83,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite documentation.
      */
     public void runIndexer(boolean shooting) {
-
+        
     }
 
     /**
@@ -117,7 +125,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
-        
+        SHUT UP DUMB MOTHERFUCKERS
     }
 
     /**
