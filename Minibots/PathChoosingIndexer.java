@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import frc.team670.mustanglib.dataCollection.sensors.TimeOfFlightSensor;
+import frc.team670.pi.ControlMode;
 import frc.team670.robot.utils.Logger;
 
 public class PathChoosingIndexer extends MustangSubsystemBase {
@@ -112,7 +113,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite docs.
      */
     public void stop() {
-
+        frontMotor.stopMotor();
+        backMotor.stopMotor();
     }
 
     /**
@@ -120,14 +122,15 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX docs.
      */
     public void stopUpdraw() {
-
+        updraw.set(ControlMode.PercentOutput, 0);
+        Object updrawStartTime = null;
     }
 
     /**
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
-        if (UPDRAW_SPEED == -0.9){
+        if (updraw.getMotorOutputPercent() == UPDRAW_SPEED){
             return true;
         }
     }
