@@ -22,9 +22,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     private int rightNumBalls, leftNumBalls;
 
     public PathChoosingIndexer() {
-        sensors = new TimeOfFlightSensor[5] {new TimeOfFlightSensor(0),
+        sensors = new TimeOfFlightSensor[6] {new TimeOfFlightSensor(0),
         new TimeOfFlightSensor(1), new TimeOfFlightSensor(2), new TimeOfFlightSensor(3),
-        new TimeOfFlightSensor(4)};
+        new TimeOfFlightSensor(4), new TimeOfFlightSensor(5)};
 
         frontMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.FRONT_MOTOR, Motor_Type.NEO_550);
         backMotor = SparkMAXFactory.buildFactorySparkMAX(RobotMap.BACK_MOTOR, Motor_Type.NEO_550);
