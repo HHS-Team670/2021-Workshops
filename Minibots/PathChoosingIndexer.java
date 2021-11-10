@@ -20,7 +20,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
 
     private int totalNumBalls;
     private int rightNumBalls, leftNumBalls;
+    private int ballsFiredOnLeft, ballsFiredOnRight;
+    private int topChamber;
 
+    public HealthState healthState;
     public PathChoosingIndexer() {
         sensors = new TimeOfFlightSensor[6] {new TimeOfFlightSensor(0),
         new TimeOfFlightSensor(1), new TimeOfFlightSensor(2), new TimeOfFlightSensor(3),
@@ -42,7 +45,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
             wheel.enableVoltageCompensation(true);
         }
 
-        chamberStates = new boolean[4]; 
+        chamberStates = new boolean[5]; 
     }
 
     private void pushGameDataToDashboard() {
@@ -60,7 +63,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     public void updateChamberStates() {
         for(int i = 0; i <= sensors.length; i++) {
-            if (sensors[i].getDistance()  =  5) {
+            if (sensors[i].getDistance()  <=  5) {
                 chamberStates[i] = true;
             }
             else {
@@ -98,7 +101,17 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX documentation.
      */
     private void runUpdraw() {
-        updraw.run
+        if (ballsFiredOnLeft/ballsFiredOnRight <= leftNumBalls/rightNumBalls) {
+            updraw.counterClockwise();
+            topWheel.clockwise();
+            ballsFiredOnLeft++;
+        }
+        else {
+            updraw.clockwise();
+            topWheel.counterClockwise();
+            ballsFiredOnRight++;
+        }
+
     }
 
     /**
@@ -109,7 +122,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @param right
      */
     public void setRatio(int left, int right) {
-
+        leftNumBalls = left;
+        rightNumBalls = right;
+        ballsFiredOnLeft = left;
+        ballsFiredOnRight = right;
     }
 
     /**
@@ -117,7 +133,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite docs.
      */
     public void stop() {
-
+        frontMotor.stop();
+        backMotor.stop();
     }
 
     /**
@@ -125,14 +142,20 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX docs.
      */
     public void stopUpdraw() {
-
+        updraw.stop();
+        topWheel.stop();
     }
 
     /**
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
-        
+        if (updraw.output() == UPDRAW_SPEED) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -150,8 +173,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @return A health state.
      */
     public MustangSubsystemBase.HealthState checkHealth() {
-        // TODO Auto-generated method stub
-        return MustangSubsystemBase.HealthState.RED;
+        if (!updrawIsUpToSpeed()) {
+            return MustangSubsystemBase.HealthState.YELLOW;
+        }
     }
 
     @Override
@@ -159,7 +183,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Add methods here that should be called repeatedly.
      */
     public void mustangPeriodic() {
-        // TODO Auto-generated method stub
+        updateChamberStates();
+        topChamber = getTopChamber();
+        healthState = checkHealth();
+        logSensorVals();
         Logger.consoleLog("Running periodic");
         
     }
