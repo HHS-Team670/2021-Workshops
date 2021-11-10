@@ -83,7 +83,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite documentation.
      */
     public void runIndexer(boolean shooting) {
-        
+        frontmotor.rotate(UPDRAW_SPEED);
+        backMotor.rotate(-1 * UPDRAW_SPEED);
     }
 
     /**
@@ -91,7 +92,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX documentation.
      */
     private void runUpdraw() {
-
+        updraw.set(Updraw_SPEED);
     }
 
     /**
@@ -110,7 +111,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite docs.
      */
     public void stop() {
-
+        frontmotor.stop();
+        backmotor.stop();
     }
 
     /**
@@ -118,14 +120,14 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX docs.
      */
     public void stopUpdraw() {
-
+        updraw.stop();
+        topWheel.stop();
     }
 
     /**
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
-        SHUT UP DUMB MOTHERFUCKERS
     }
 
     /**
