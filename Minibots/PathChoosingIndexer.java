@@ -13,6 +13,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     private TalonSRX updraw, topWheel;
 
     private boolean[] chamberStates;
+    private boolean shooting; 
 
     //wheel speeds
     private double UPDRAW_SPEED = -0.9;
@@ -58,7 +59,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     /**
      * Loop through sensors list and update the chamber states.
      * Remember, true means that a ball is detected, and false means that it isn't.
-     * Remember to change rightNumBalls, leftNumBalls, and totalNumBalls accordingly.
+     * Remember to change rightNumBalls, leftNumBalls, and totalNumBalls accor  `dingly.
      * Refer to the ToF documentation!
      */
     public void updateChamberStates() {
@@ -70,12 +71,42 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
         }
     }
 
+    private void updateSensorVals() {
+        if (serialport == null) {
+            try {
+                serialport = new SerialPort(9600, SerialPort.Port.kUSB1);
+            } catch (Exception e) {
+                Logger.consoleError(e.getMessage());
+            }
+        }
+        if (serialport != null) {
+            try {
+                String reading = serialport.readString();
+                if (reading.length() > 0) {
+                    serialParser(reading);
+                    for (int i = 0; i < sensorVals.length; i++) {
+                        if (sensorVals[i] >= 300) {
+                            serialport.reset();
+                        }
+                    }
+                    // logSensorVals();
+                }
+            } catch (Exception e) {
+                serialport = null;
+            }
+        }
+    }
+
     /**
      * Requires a loop.
      * @return The topmost chamber that holds a ball.
      */
     public int getTopChamber() {
-
+        for (int i = 3 ; i > -1 ; i--) {
+            if (chamberStates[i]) {
+                return i;
+            } 
+        }
     }
 
     /**
@@ -83,7 +114,11 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to SparkMaxLite documentation.
      */
     public void runIndexer(boolean shooting) {
-
+        frontMotor.set(INDEXER_SPEED);
+        backMotor.set(-1 * INDEXER_SPEED);
+        if (shooting) {
+            updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+        }
     }
 
     /**
@@ -91,7 +126,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX documentation.
      */
     private void runUpdraw() {
-
+        updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+        topWheel.set(ControlMode.PercentOutput, UPDRAW_SPEED);
     }
 
     /**
@@ -139,7 +175,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * optional.
      */
     public void logSensorVals() {
-
+        Logger.consoleLog("0: %s, 1: %s, 2: %s, 3: %s", sensorVals[0], sensorVals[1], sensorVals[2], sensorVals[3]);
+        Logger.consoleLog("Chamber to check: %s", chamberToCheck);
+        Logger.consoleLog("Total balls: %s", getTotalNumBalls());
     }
 
 
@@ -151,7 +189,18 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     public MustangSubsystemBase.HealthState checkHealth() {
         // TODO Auto-generated method stub
-        return MustangSubsystemBase.HealthState.RED;
+        //return MustangSubsystemBase.HealthState.RED;
+        CANError frontError = frontMotor.getLastError();
+        CANError backError = backMotor.getLastError();
+
+        boolean isFrontError = isSparkMaxErrored((SparkMAXLite) frontMotor);
+        boolean isBackError = isSparkMaxErrored((SparkMAXLite) backMotor);
+        // boolean isRotatorError = isSparkMaxErrored(rotator);
+        boolean isUpdrawError = isPhoenixControllerErrored(updraw);
+        if (isUpdrawError || isFrontError || isBackError) {
+            MustangNotifications.reportError("RED Errors: front: %s, back: %s", frontError, backError);
+            return HealthState.RED;
+        }
     }
 
     @Override
@@ -159,7 +208,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Add methods here that should be called repeatedly.
      */
     public void mustangPeriodic() {
-        // TODO Auto-generated method stub
+        updateChamberStates();
+        checkHealth();
+        updateSensorVals();
         Logger.consoleLog("Running periodic");
         
     }
