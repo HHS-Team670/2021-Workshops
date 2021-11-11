@@ -128,13 +128,14 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Check motor output against UPDRAW_SPEED to determine whether it is running fast enough.
      */
     public boolean updrawIsUpToSpeed() {
+        retrun (frontMotor.speed >= UPDRAW_SPEED);
     }
 
     /**
      * optional.
      */
     public void logSensorVals() {
-
+        Logger.consoleLog();
     }
 
 
@@ -158,9 +159,5 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
         Logger.consoleLog("Running periodic");
         
     }
-
-    
-
-
     
 }
