@@ -64,7 +64,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     public void updateChamberStates() {
         totalNumBalls = 0;
-        for (int i = 0; i < sensorVals.length; i++) {
+        for (int i = 0; i < 4; i++) {
             chamberStates[i] = sensorVals[i] < RobotConstants.MIN_BALL_DETECTED_WIDTH_INDEXER;
             if (chamberStates[i])
                 totalNumBalls++;
@@ -115,7 +115,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     public void runIndexer(boolean shooting) {
         frontMotor.set(INDEXER_SPEED);
-        backMotor.set(-1 * INDEXER_SPEED);
+        backMotor.set(INDEXER_SPEED);
         if (shooting) {
             updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
         }
@@ -127,7 +127,15 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     private void runUpdraw() {
         updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+        if (leftNumBalls > 0) {
+
+        } else {
+
+        }
         topWheel.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+        topWheel.set(ControlMode.PercentOutput, UPDRAW_SPEED * -1);
+        }
+
     }
 
     /**
@@ -137,10 +145,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @param left 
      * @param right
      */
-    public void setRatio(int left, int right) {
-        leftNumBalls = left;
-        rightNumBalls = right;
-        
+    public void setRatio(int left, int right, int totalNumBalls) { 
+        int totalRatio = left+right;
+        leftNumBalls = (totalNumBalls/totalRatio)*left;
+        rightNumBalls = (totalNumBalls/totalRatio)*right;
 
     }
 
@@ -159,6 +167,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      */
     public void stopUpdraw() {
         updraw.set(ControlMode.PercentOutput, 0);
+        topWheel.set(ControlMode.PercentOutput, 0);
         Object updrawStartTime = null;
     }
 
@@ -208,6 +217,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Add methods here that should be called repeatedly.
      */
     public void mustangPeriodic() {
+        
         updateChamberStates();
         checkHealth();
         updateSensorVals();
