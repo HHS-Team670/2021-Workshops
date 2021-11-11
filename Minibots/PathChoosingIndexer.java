@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 import frc.team670.mustanglib.dataCollection.sensors.TimeOfFlightSensor;
 import frc.team670.robot.utils.Logger;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PathChoosingIndexer extends MustangSubsystemBase {
 
     private TimeOfFlightSensor[] sensors; // sensor 0 is bottom most, sensor 5 is top most
@@ -77,8 +77,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * @return The topmost chamber that holds a ball.
      */
     public int getTopChamber() {
-        for(int i = sensors.length; i >= 0; i--) {
+        for(int i = sensors.length-3; i >= 0; i--) {
             if (chamberStates[i] = true) {
+                topChamber = i;
                 return i;
             }
         }
@@ -92,7 +93,8 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
         frontMotor.set(INDEXER_SPEED);
         backMotor.set(-1 * INDEXER_SPEED);
         if (shooting) {
-            updraw.set(ControlMode.PercentOutput, UPDRAW_SPEED);
+            runUpdraw();
+
         }
     }
 
@@ -101,14 +103,14 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Refer to TalonSRX documentation.
      */
     private void runUpdraw() {
-        if (ballsFiredOnLeft/ballsFiredOnRight <= leftNumBalls/rightNumBalls) {
-            updraw.counterClockwise();
-            topWheel.clockwise();
+        if (ballsFiredOnLeft <= leftNumBalls) {
+            updraw.set(UPDRAW_SPEED*-1);
+            topWheel.set(UPDRAW_SPEED);
             ballsFiredOnLeft++;
         }
-        else {
-            updraw.clockwise();
-            topWheel.counterClockwise();
+        else if (ballsFiredOnRight <= rightNumBalls) {
+            updraw.set(UPDRAW_SPEED);
+            topWheel.set(UPDRAW_SPEED*-1);
             ballsFiredOnRight++;
         }
 
@@ -124,8 +126,6 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     public void setRatio(int left, int right) {
         leftNumBalls = left;
         rightNumBalls = right;
-        ballsFiredOnLeft = left;
-        ballsFiredOnRight = right;
     }
 
     /**
@@ -162,7 +162,9 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * optional.
      */
     public void logSensorVals() {
-
+        Logger.consoleLog("LeftNumBalls: %s RightNumBalls: %s, ballsFiredOnLeft: %s ballsFiredOnRight: %s", leftNumBalls, rightNumBalls, ballsFiredOnLeft, ballsFiredOnRight);
+        Logger.consolelog("Chamber 1: %s Chamber 2: %s Chamber 3: %s Chamber 4: %s Chamber 5: %s Chamber 6: %s", chamberStates[0], chamberStates[1], chamberStates[2], chamberStates[3], chamberStates[4], chamberStates[5], chamberStates[6]);
+        Logger.consolelog("Top Chamber: %d", topChamber);
     }
 
 
@@ -185,10 +187,10 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     public void mustangPeriodic() {
         updateChamberStates();
         topChamber = getTopChamber();
-        healthState = checkHealth();
         logSensorVals();
         Logger.consoleLog("Running periodic");
-        
+        SmartDashboard.putNumber("Ratio for ball firing: ", leftNumBalls + ":" + rightNumBalls);
+        SmartDashboard.putBooleanArray("Chamber States", chamberStates);
     }
 
     
