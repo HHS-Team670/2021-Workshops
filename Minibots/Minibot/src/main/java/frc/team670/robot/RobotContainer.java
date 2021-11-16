@@ -72,7 +72,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ObstacleCourse(5, driveBase); //TODO REPLACE m_autonomousCommand WITH THE COMMAND YOU WANT TO SCHEDULE
+    return new ObstacleCourse(driveBase); //TODO REPLACE m_autonomousCommand WITH THE COMMAND YOU WANT TO SCHEDULE
   }
 
 

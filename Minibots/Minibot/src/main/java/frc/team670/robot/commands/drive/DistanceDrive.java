@@ -19,11 +19,11 @@ public class DistanceDrive extends CommandBase {
 	 * @param lspeed Speed for left side
 	 * @param rspeed Speed for right side
 	 */
-	public DistanceDrive(double distance_in, double lspeed, double rspeed, DriveBase driveBase) {
+	public DistanceDrive(double distance_n, double lspeed, double rspeed, DriveBase driveBase) {
 		this.speedL = lspeed;
 		this.speedR = rspeed;
 		//this.seconds = seconds;
-		this.dist = distance_in;
+		this.dist = distance_n;
 		this.driveBase = driveBase;
 		addRequirements(driveBase);
 	}

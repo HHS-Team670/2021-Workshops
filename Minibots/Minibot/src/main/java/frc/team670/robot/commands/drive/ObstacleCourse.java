@@ -5,6 +5,6 @@ import frc.team670.robot.subsystems.DriveBase;
 
 public class ObstacleCourse extends SequentialCommandGroup {
     public ObstacleCourse(DriveBase driveBase) {
-        addCommands(new PIDDistanceDrive(18, driveBase), new TimeDrive(5, 1, 0.5, driveBase), new PIDDistanceDrive(18, driveBase));
+        addCommands( new TimeDrive(3, 0.8, 1, driveBase), new DistanceDrive(40, 1, 1, driveBase), new TimeDrive(3, 0.3, 1, driveBase));
     }
 }
