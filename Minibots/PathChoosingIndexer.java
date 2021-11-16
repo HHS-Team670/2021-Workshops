@@ -58,7 +58,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Remember to change rightNumBalls, leftNumBalls, and totalNumBalls accordingly.
      * Refer to the ToF documentation!
      */
-    public void updateChamberStates() {
+    private void updateChamberStates() {
 
     }
 
@@ -82,7 +82,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Run updraw and topWheel here. The direction of rotation of topWheel should be determined by the set ratio.
      * Refer to TalonSRX documentation.
      */
-    private void runUpdraw() {
+    public void runUpdraw() {
 
     }
 
