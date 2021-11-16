@@ -21,7 +21,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
     private int totalNumBalls;
     private int rightNumBalls, leftNumBalls;
     private int ballsFiredOnLeft, ballsFiredOnRight;
-    private int topChamber;
+    public int topChamber;
 
     public HealthState healthState;
     public PathChoosingIndexer() {
@@ -85,6 +85,14 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
         }
     }
 
+    public int getBottomChamber() {
+        for(int i = 0; i >= sensors.length - 3; i++) {
+            if (chamberStates[i] = true) {
+                return i;
+            }
+        }
+    }
+
     /**
      * Run the frontMotor and backMotor, as well as updraw depending on the 'shooting' parameter.
      * Refer to SparkMaxLite documentation.
@@ -102,7 +110,7 @@ public class PathChoosingIndexer extends MustangSubsystemBase {
      * Run updraw and topWheel here. The direction of rotation of topWheel should be determined by the set ratio.
      * Refer to TalonSRX documentation.
      */
-    private void runUpdraw() {
+    public void runUpdraw() {
         if (ballsFiredOnLeft <= leftNumBalls) {
             updraw.set(UPDRAW_SPEED*-1);
             topWheel.set(UPDRAW_SPEED);
