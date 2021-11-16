@@ -40,9 +40,9 @@ public class DistanceDrive extends CommandBase {
 	
 	public void execute() { 
 		Logger.consoleLog("LeftSpeed: %s Right Speed: %s DistanceT: %s Ticks: %s", 
-				speedL, speedR, getDistance(), driveBase.getLeftEncoder().getTicks());		
+				speedL, speedR, getDistance(), driveBase.getRightEncoder().getTicks());		
 		driveBase.tankDrive(speedL, speedR);
-		correct();
+		// correct();
 	}
 
 	
@@ -55,21 +55,21 @@ public class DistanceDrive extends CommandBase {
 	}
 
 	
-	// Checks that the wheels are driving at the same speed, corrects the speed
-	// so that the left/right are equal
-	public void correct() {
-		double currentTicksL = driveBase.getLeftEncoder().getTicks();
-		double currentTicksR = driveBase.getRightEncoder().getTicks();
+	// // Checks that the wheels are driving at the same speed, corrects the speed
+	// // so that the left/right are equal
+	// public void correct() {
+	// 	double currentTicksL = driveBase.getLeftEncoder().getTicks();
+	// 	double currentTicksR = driveBase.getRightEncoder().getTicks();
 		
-		if (Math.abs(currentTicksL - currentTicksR) < 5)
-			return;
+	// 	if (Math.abs(currentTicksL - currentTicksR) < 5)
+	// 		return;
 		
-		else if (currentTicksL > currentTicksR)
-				speedL -= 0.01;
+	// 	else if (currentTicksL > currentTicksR)
+	// 			speedL -= 0.01;
 		
-		else if (currentTicksL < currentTicksR)
-				speedR -= 0.01;
-	}
+	// 	else if (currentTicksL < currentTicksR)
+	// 			speedR -= 0.01;
+	// }
 	
 	// Make this return true when this Command no longer needs to run execute()
 		@Override
