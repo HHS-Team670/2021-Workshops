@@ -81,6 +81,7 @@ public class DistanceDrive extends CommandBase {
 			
 		public double getDistance()
 		{
+			//left encoder isn't working so you can't calculate how fast that wheel is going
 			double distance = driveBase.getRightEncoder().getDistance();
 			return Math.abs(distance);
 		}
