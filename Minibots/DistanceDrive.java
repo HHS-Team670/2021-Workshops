@@ -9,7 +9,7 @@ public class DistanceDrive extends CommandBase {
 
     public DistanceDrive() {
         //initialize fields
-        addRequirements(driveBase)
+        
     }
 
     @Override
