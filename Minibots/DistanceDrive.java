@@ -9,7 +9,7 @@ public class DistanceDrive extends CommandBase {
 
     public DistanceDrive() {
         //initialize fields
-        //addRequirements(driveBase)
+        addRequirements(driveBase)
     }
 
     @Override
@@ -49,7 +49,8 @@ public class DistanceDrive extends CommandBase {
 
         if (leftEncoder.getTicks() < rightEncoder.getTicks()){
             rightPower -= 0.01;
-        } else if (leftEncoder.getTicks() > rightEncoder.getTicks()){
+        } 
+        else if (leftEncoder.getTicks() > rightEncoder.getTicks()){
             leftPower -= 0.01;
         }
 

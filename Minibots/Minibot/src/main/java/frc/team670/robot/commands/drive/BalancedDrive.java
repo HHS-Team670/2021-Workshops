@@ -1,28 +1,32 @@
 package frc.team670.robot.commands.drive;
 
+//imports allow us to access the file of other folders
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;  
 import frc.team670.robot.Robot;
 import frc.team670.robot.subsystems.DriveBase;
 import frc.team670.robot.utils.Logger;
 
+//BalacedDrive has all the fields and methods of WaitCommand, (like a dog and a canine [inheritance])
 public class BalancedDrive extends WaitCommand {
 
   private double speedL, speedR, seconds;
-  public DriveBase driveBase;
+  public DriveBase driveBase;  //allocating some memory space of type Drivebase to the name drivebase (instantiating an object)
+  //DriveBase is a non-primitve data type, which is a class
 
-  private double ticksL, ticksR;
+  private double ticksL, ticksR;  //number of ticks that the encoders recieves
 
+  //constructor
 	public BalancedDrive(double seconds, double lspeed, double rspeed, DriveBase driveBase) {
-    super(seconds);
-		this.speedL = lspeed;
-		this.speedR = rspeed;
+    	super(seconds);          // the seconds comes from the superclass WaitCommand
+		this.speedL = lspeed;    // speedL is a field, and we are assigning lspeed to it.  lspeed is a parameter 
+		this.speedR = rspeed;    // 
 		this.seconds = seconds;
     addRequirements(driveBase);
     this.driveBase = driveBase;
 	}
 
-	
+	//this method called correct doesn't return anything, the purpose of this class is t
 	public void correct() {
 		double currentTicksL = Math.abs(driveBase.getLeftEncoder().getTicks());
     double currentTicksR = Math.abs(driveBase.getRightEncoder().getTicks());
