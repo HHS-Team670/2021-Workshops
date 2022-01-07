@@ -22,7 +22,7 @@ deploy {
 
             locations {
                 ssh {
-                    address = "raspberrypi.local"  // CHANGE TO raspberrypi.local if working with minibot #3, ssh BEFORE ./gradlew deploy
+                    address = "raspberrypi.local"  // Required. Address
                     user = 'pi'             // Required. The user to login as
                     password = 'hhs670'               // The password for the user. Default: blank (empty) string
                     ipv6 = false                // Are IPv6 addresses permitted? Default: false
